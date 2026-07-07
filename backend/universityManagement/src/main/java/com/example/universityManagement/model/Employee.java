@@ -4,19 +4,18 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "students")
+@Table(name = "employees")
 @Data
-public class Student {
+public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String studentRegNumber;
-    private String firstName;
-    private String lastName;
-
-    @Column(unique = true)
+    private String employeeId;
+    private String name;
+    private String designation;
+    private String department;
     private String email;
 
     @OneToOne(cascade = CascadeType.ALL)
