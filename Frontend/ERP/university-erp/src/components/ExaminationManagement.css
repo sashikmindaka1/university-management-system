@@ -1,0 +1,104 @@
+.grading-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.selection-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 25px;
+  border-radius: 12px;
+  flex: 1;
+  max-width: 500px;
+}
+
+.course-selector {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  font-size: 1.05rem;
+  font-weight: 500;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+}
+
+.course-selector option {
+  background-color: #1e293b;
+  color: #ffffff;
+}
+
+.publish-btn {
+  background: linear-gradient(135deg, var(--primary-accent), #6366f1);
+  color: white;
+}
+
+.publish-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+}
+
+.marks-input {
+  width: 80px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: var(--text-light);
+  font-size: 1rem;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.marks-input:focus {
+  border-color: var(--primary-accent);
+}
+
+.marks-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Remove default arrows from number input */
+.marks-input::-webkit-outer-spin-button,
+.marks-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Dynamic Grade Badges */
+.grade-badge {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-muted);
+}
+
+.grade-a { background: rgba(16, 185, 129, 0.2); border-color: #34d399; color: #34d399; }
+.grade-b { background: rgba(59, 130, 246, 0.2); border-color: #60a5fa; color: #60a5fa; }
+.grade-c { background: rgba(245, 158, 11, 0.2); border-color: #fbbf24; color: #fbbf24; }
+.grade-s { background: rgba(217, 119, 6, 0.2); border-color: #d97706; color: #d97706; }
+.grade-f { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; color: #ef4444; }
+
+/* Status Indicators */
+.status-badge.draft {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+.status-badge.published {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}

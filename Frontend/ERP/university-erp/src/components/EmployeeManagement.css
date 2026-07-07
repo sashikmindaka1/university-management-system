@@ -1,0 +1,39 @@
+.add-employee-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.add-employee-form input,
+.add-employee-form select {
+  flex: 1;
+  min-width: 200px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 12px 15px;
+  color: var(--text-light);
+  font-size: 0.95rem;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.3s;
+}
+
+.add-employee-form input:focus,
+.add-employee-form select:focus {
+  border-color: var(--primary-accent);
+}
+
+.add-employee-form select option {
+  background-color: #1e293b; 
+  color: #ffffff;
+}
+
+.mono-text {
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}

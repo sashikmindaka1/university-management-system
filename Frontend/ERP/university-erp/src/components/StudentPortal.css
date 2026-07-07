@@ -1,0 +1,124 @@
+/* Profile Summary Area */
+.profile-summary-card {
+  padding: 25px;
+  margin-bottom: 25px;
+  background: linear-gradient(135deg, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.9));
+  border-left: 4px solid var(--primary-accent);
+}
+
+.profile-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  align-items: center;
+}
+
+.profile-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.profile-value {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* 3-Column Academic Grid */
+.academic-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr; 
+  gap: 25px;
+}
+
+.academic-card {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.academic-card .card-header {
+  padding: 25px 25px 15px 25px;
+  margin-bottom: 0;
+}
+
+/* Attendance Card Specific Styles */
+.attendance-summary {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.attendance-ring {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(15, 23, 42, 0.9) 79%, transparent 80% 100%),
+              conic-gradient(#10b981 88%, rgba(255, 255, 255, 0.1) 0);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+}
+
+.attendance-percentage {
+  font-size: 2.2rem;
+  color: #10b981;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+}
+
+.attendance-percentage span {
+  font-size: 1rem;
+}
+
+.attendance-ring p {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-top: -5px;
+}
+
+.attendance-stats {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 20px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.stat-row strong {
+  color: var(--text-light);
+}
+
+.text-green { color: #10b981 !important; }
+.text-red { color: #ef4444 !important; }
+
+/* Responsive adjustment for smaller screens */
+@media (max-width: 1200px) {
+  .academic-grid {
+    grid-template-columns: 1fr;
+  }
+}
