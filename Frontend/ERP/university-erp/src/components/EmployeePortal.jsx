@@ -50,7 +50,7 @@ export default function EmployeePortal() {
       {/* Main Content */}
       <main className="dashboard-content">
         <header className="content-header">
-          <h1>staff Portal</h1>
+          <h1>Staff Portal</h1>
           <p>Welcome back, Professor {activeEmployee ? activeEmployee.name : 'Staff'}.</p>
         </header>
 
