@@ -59,8 +59,8 @@ export default function AttendanceManagement() {
                 <th>Student ID</th>
                 <th>Name</th>
                 <th>Batch</th>
-                <th style={{ textAlign: 'center' }}>Status</th>
-                <th style={{ textAlign: 'center' }}>Mark Action</th>
+                <th style={{ textAlign: 'center' }}>status</th>
+                <th style={{ textAlign: 'center' }}>mark Action</th>
               </tr>
             </thead>
             <tbody>

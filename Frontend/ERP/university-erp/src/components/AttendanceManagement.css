@@ -1,8 +1,4 @@
-.attendance-controls {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
+
 
 .date-picker-wrapper {
   position: relative;
@@ -19,6 +15,12 @@
   font-size: 1rem;
   outline: none;
   font-family: 'Inter', sans-serif;
+}
+
+.attendance-controls {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 /* Fix calendar icon color for dark mode in some browsers */
@@ -38,10 +40,7 @@
 }
 
 /* Status Badges */
-.status-badge.pending {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-muted);
-}
+
 
 .status-badge.present {
   background: rgba(16, 185, 129, 0.2);
@@ -53,27 +52,15 @@
   color: #ef4444;
 }
 
-/* Action Toggles */
-.action-toggles {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+.status-badge.pending {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
 }
 
-.toggle-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 15px;
-  border: 1px solid var(--glass-border);
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.2);
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 500;
-  transition: all 0.2s;
-}
+/* Action Toggles */
+
+
+
 
 .toggle-btn:hover {
   background: rgba(255, 255, 255, 0.1);
@@ -95,4 +82,25 @@
   display: flex;
   justify-content: flex-end;
   margin-top: 10px;
+}
+
+.action-toggles {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 15px;
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
 }
