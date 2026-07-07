@@ -61,8 +61,8 @@
 }
 
 .attendance-ring {
-  width: 140px;
-  height: 140px;
+  width: 170px;
+  height: 170px;
   border-radius: 50%;
   background: radial-gradient(closest-side, rgba(15, 23, 42, 0.9) 79%, transparent 80% 100%),
               conic-gradient(#10b981 88%, rgba(255, 255, 255, 0.1) 0);
