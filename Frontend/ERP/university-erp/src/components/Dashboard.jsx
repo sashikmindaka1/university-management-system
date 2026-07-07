@@ -128,7 +128,7 @@ export default function Dashboard() {
           <button className="logout-btn" onClick={() => navigate('/')}>
             <LogOut size={20} />
             <span>Logout</span>
-          </button>
+          </button> 
         </div>
       </nav>
 
