@@ -9,9 +9,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees")
-@CrossOrigin(origins = "http://localhost:5173")
 public class EmployeeController {
-
+    
     @Autowired
     private EmployeeService employeeService;
 

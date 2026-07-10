@@ -1,190 +1,984 @@
-import React, { useState, useEffect } from 'react';
-import { BookOpen, Plus, UserPlus, Trash2, GraduationCap } from 'lucide-react';
-import './CourseRegistration.css';
+import React, { useEffect, useState } from "react";
+import { Plus, Trash2, Search } from "lucide-react";
 
-export default function CourseRegistration() {
-  // 1. Load Data from Local Storage
-  const [students, setStudents] = useState([]);
-  
-  const [courses, setCourses] = useState(() => {
-    const savedCourses = localStorage.getItem('erp_courses');
-    return savedCourses ? JSON.parse(savedCourses) : [
-      { id: 'C-101', code: 'SE101', name: 'Intro to Software Engineering', credits: 3 },
-      { id: 'C-102', code: 'CS204', name: 'Database Management Systems', credits: 4 }
-    ];
-  });
+import {
+    getCourses,
+    addCourse,
+    deleteCourse
+} from "../services/courseService";
 
-  const [enrollments, setEnrollments] = useState(() => {
-    const savedEnrollments = localStorage.getItem('erp_enrollments');
-    return savedEnrollments ? JSON.parse(savedEnrollments) : [];
-  });
+import {
+    getStudents
+} from "../services/studentService";
 
-  // 2. Form States
-  const [newCourse, setNewCourse] = useState({ code: '', name: '', credits: '' });
-  const [newEnrollment, setNewEnrollment] = useState({ studentId: '', courseId: '' });
+import {
+    addEnrollment,
+    getEnrollments,
+    deleteEnrollment
+} from "../services/enrollmentService";
 
-  // 3. Sync with Local Storage
-  useEffect(() => {
-    const savedStudents = localStorage.getItem('erp_students');
-    if (savedStudents) setStudents(JSON.parse(savedStudents));
-  }, []);
+import "./CourseRegistration.css";
 
-  useEffect(() => {
-    localStorage.setItem('erp_courses', JSON.stringify(courses));
-  }, [courses]);
 
-  useEffect(() => {
-    localStorage.setItem('erp_enrollments', JSON.stringify(enrollments));
-  }, [enrollments]);
+export default function CourseRegistration(){
 
-  // 4. Handlers
-  const handleAddCourse = (e) => {
-    e.preventDefault();
-    if (!newCourse.code || !newCourse.name) return;
-    
-    const courseToAdd = { 
-      ...newCourse, 
-      id: `C-${Date.now()}` 
-    };
-    
-    setCourses([...courses, courseToAdd]);
-    setNewCourse({ code: '', name: '', credits: '' });
-  };
 
-  const handleEnrollStudent = (e) => {
-    e.preventDefault();
-    if (!newEnrollment.studentId || !newEnrollment.courseId) return;
+const [courses,setCourses] = useState([]);
 
-    // Prevent duplicate enrollments
-    const isDuplicate = enrollments.some(
-      (enr) => enr.studentId === newEnrollment.studentId && enr.courseId === newEnrollment.courseId
-    );
+const [students,setStudents] = useState([]);
 
-    if (isDuplicate) {
-      alert("This student is already enrolled in this course.");
-      return;
-    }
+const [enrollments,setEnrollments] = useState([]);
 
-    const enrollmentRecord = {
-      id: `E-${Date.now()}`,
-      studentId: newEnrollment.studentId,
-      courseId: newEnrollment.courseId,
-      date: new Date().toLocaleDateString()
-    };
 
-    setEnrollments([...enrollments, enrollmentRecord]);
-    setNewEnrollment({ studentId: '', courseId: '' });
-  };
 
-  const handleDeleteEnrollment = (id) => {
-    setEnrollments(enrollments.filter(enr => enr.id !== id));
-  };
+const [newCourse,setNewCourse] = useState({
 
-  // Helper functions to get names from IDs
-  const getStudentName = (id) => students.find(s => s.id.toString() === id.toString())?.name || 'Unknown Student';
-  const getCourseName = (id) => courses.find(c => c.id === id)?.name || 'Unknown Course';
+    courseCode:"",
+    courseName:"",
+    credits:""
 
-  return (
-    <div className="module-container">
-      
-      {/* Top Section: Dual Forms */}
-      <div className="registration-grid">
-        
-        {/* Form 1: Add New Course */}
-        <div className="glass-card form-card">
-          <div className="card-header">
-            <BookOpen size={20} className="header-icon" />
-            <h3>Create Course</h3>
-          </div>
-          <form onSubmit={handleAddCourse} className="stacked-form">
-            <input 
-              type="text" placeholder="Course Code (e.g., SE301)" 
-              value={newCourse.code} onChange={(e) => setNewCourse({...newCourse, code: e.target.value})} required 
-            />
-            <input 
-              type="text" placeholder="Course Title" 
-              value={newCourse.name} onChange={(e) => setNewCourse({...newCourse, name: e.target.value})} required 
-            />
-            <input 
-              type="number" placeholder="Credit Value" min="1" max="6"
-              value={newCourse.credits} onChange={(e) => setNewCourse({...newCourse, credits: e.target.value})} required 
-            />
-            <button type="submit" className="action-btn add-btn">
-              <Plus size={18} /> Add to Catalog
-            </button>
-          </form>
-        </div>
+});
 
-        {/* Form 2: Enroll Student */}
-        <div className="glass-card form-card">
-          <div className="card-header">
-            <UserPlus size={20} className="header-icon" />
-            <h3>Process Enrollment</h3>
-          </div>
-          <form onSubmit={handleEnrollStudent} className="stacked-form">
-            <select 
-              value={newEnrollment.studentId} 
-              onChange={(e) => setNewEnrollment({...newEnrollment, studentId: e.target.value})} required
-            >
-              <option value="">-- Select Student --</option>
-              {students.map(s => <option key={s.id} value={s.id}>{s.studentId} - {s.name}</option>)}
-            </select>
 
-            <select 
-              value={newEnrollment.courseId} 
-              onChange={(e) => setNewEnrollment({...newEnrollment, courseId: e.target.value})} required
-            >
-              <option value="">-- Select Course --</option>
-              {courses.map(c => <option key={c.id} value={c.id}>{c.code} - {c.name}</option>)}
-            </select>
 
-            <button type="submit" className="action-btn enroll-btn">
-              <GraduationCap size={18} /> Confirm Registration
-            </button>
-          </form>
-        </div>
+const [newEnrollment,setNewEnrollment] = useState({
 
-      </div>
+    studentId:"",
+    courseId:"",
+    semester:"",
+    year:""
 
-      {/* Bottom Section: Active Enrollments Ledger */}
-      <div className="glass-card table-card">
-        <h3 className="table-title">Active Course Registrations</h3>
-        <div className="table-responsive">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Registration ID</th>
-                <th>Student Name</th>
-                <th>Course Enrolled</th>
-                <th>Registration Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {enrollments.length > 0 ? (
-                enrollments.map((record) => (
-                  <tr key={record.id}>
-                    <td><span className="mono-text">{record.id}</span></td>
-                    <td><strong>{getStudentName(record.studentId)}</strong></td>
-                    <td>{getCourseName(record.courseId)}</td>
-                    <td>{record.date}</td>
-                    <td>
-                      <button className="icon-btn delete-btn" onClick={() => handleDeleteEnrollment(record.id)}>
-                        <Trash2 size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="empty-state">No enrollments processed yet.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+});
 
-    </div>
-  );
+
+const [searchTerm,setSearchTerm] = useState("");
+
+
+
+
+// LOAD DATA
+
+useEffect(()=>{
+
+    loadCourses();
+    loadStudents();
+    loadEnrollments();
+
+},[]);
+
+
+
+
+// GET COURSES
+
+const loadCourses = async()=>{
+
+try{
+
+const data = await getCourses();
+
+setCourses(
+    Array.isArray(data) ? data : []
+);
+
+
+}catch(error){
+
+console.log("Course load error",error);
+
+}
+
+};
+
+
+
+
+// GET STUDENTS
+
+const loadStudents = async()=>{
+
+try{
+
+const data = await getStudents();
+
+
+setStudents(
+    Array.isArray(data) ? data : []
+);
+
+
+}catch(error){
+
+console.log("Student load error",error);
+
+}
+
+};
+
+
+
+
+// GET ENROLLMENTS
+
+const loadEnrollments = async()=>{
+
+try{
+
+const data = await getEnrollments();
+
+
+setEnrollments(
+    Array.isArray(data) ? data : []
+);
+
+
+}catch(error){
+
+console.log("Enrollment load error",error);
+
+}
+
+};
+
+
+
+
+
+// COURSE INPUT
+
+const handleCourseChange=(e)=>{
+
+setNewCourse({
+
+...newCourse,
+
+[e.target.name]:e.target.value
+
+});
+
+};
+
+
+
+
+
+
+// ADD COURSE
+
+const handleAddCourse=async(e)=>{
+
+e.preventDefault();
+
+
+try{
+
+
+const course={
+
+courseCode:newCourse.courseCode,
+
+courseName:newCourse.courseName,
+
+credits:Number(newCourse.credits)
+
+};
+
+
+
+const saved = await addCourse(course);
+
+
+
+setCourses([
+
+...courses,
+
+saved
+
+]);
+
+
+
+setNewCourse({
+
+courseCode:"",
+courseName:"",
+credits:""
+
+});
+
+
+
+}catch(error){
+
+console.log(error);
+
+}
+
+
+};
+
+
+
+
+
+
+// DELETE COURSE
+
+const handleDeleteCourse=async(id)=>{
+
+
+try{
+
+
+await deleteCourse(id);
+
+
+setCourses(
+
+courses.filter(
+course=>course.id!==id
+)
+
+);
+
+
+
+}catch(error){
+
+console.log(error);
+
+}
+
+
+};
+
+
+
+
+
+
+
+// ENROLLMENT INPUT
+
+const handleEnrollmentChange=(e)=>{
+
+
+setNewEnrollment({
+
+...newEnrollment,
+
+[e.target.name]:e.target.value
+
+});
+
+
+};
+
+
+
+
+
+
+
+// ADD ENROLLMENT
+
+const handleAddEnrollment=async(e)=>{
+
+
+e.preventDefault();
+
+
+try{
+
+
+const enrollment={
+
+
+student:{
+
+id:Number(newEnrollment.studentId)
+
+},
+
+
+course:{
+
+id:Number(newEnrollment.courseId)
+
+},
+
+
+semester:newEnrollment.semester,
+
+
+year:newEnrollment.year
+
+
+};
+
+
+
+
+const saved = await addEnrollment(enrollment);
+
+
+
+setEnrollments([
+
+...enrollments,
+
+saved
+
+]);
+
+
+
+setNewEnrollment({
+
+studentId:"",
+courseId:"",
+semester:"",
+year:""
+
+});
+
+
+
+}catch(error){
+
+console.log("Enrollment error",error);
+
+}
+
+
+};
+
+
+
+
+
+
+
+// DELETE ENROLLMENT
+
+const handleDeleteEnrollment=async(id)=>{
+
+
+try{
+
+
+await deleteEnrollment(id);
+
+
+setEnrollments(
+
+enrollments.filter(
+e=>e.id!==id
+)
+
+);
+
+
+}catch(error){
+
+console.log(error);
+
+}
+
+
+};
+
+
+
+
+
+
+
+const filteredCourses = courses.filter(course=>
+
+course.courseName
+?.toLowerCase()
+.includes(searchTerm.toLowerCase())
+
+||
+
+course.courseCode
+?.toLowerCase()
+.includes(searchTerm.toLowerCase())
+
+);
+
+
+
+
+
+
+
+return(
+
+
+<div className="module-container">
+
+
+
+
+
+<div className="controls-section">
+
+<div className="search-bar">
+
+<Search size={18}/>
+
+
+<input
+
+placeholder="Search Course..."
+
+value={searchTerm}
+
+onChange={(e)=>setSearchTerm(e.target.value)}
+
+/>
+
+
+</div>
+
+</div>
+
+
+
+
+
+
+{/* ADD COURSE */}
+
+
+<div className="glass-card form-card">
+
+
+<h3>
+Register New Course
+</h3>
+
+
+
+<form onSubmit={handleAddCourse}>
+
+
+<input
+
+name="courseCode"
+
+placeholder="Course Code"
+
+value={newCourse.courseCode}
+
+onChange={handleCourseChange}
+
+required
+
+/>
+
+
+
+
+<input
+
+name="courseName"
+
+placeholder="Course Name"
+
+value={newCourse.courseName}
+
+onChange={handleCourseChange}
+
+required
+
+/>
+
+
+
+
+<input
+
+type="number"
+
+name="credits"
+
+placeholder="Credits"
+
+value={newCourse.credits}
+
+onChange={handleCourseChange}
+
+required
+
+/>
+
+
+
+
+<button className="action-btn add-btn">
+
+<Plus size={18}/>
+
+Add Course
+
+</button>
+
+
+
+</form>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{/* COURSE LIST */}
+
+
+<div className="glass-card table-card">
+
+
+<h3>
+Courses
+</h3>
+
+
+<table className="data-table">
+
+
+<thead>
+
+<tr>
+
+<th>Code</th>
+
+<th>Name</th>
+
+<th>Credits</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+
+
+<tbody>
+
+
+{
+
+filteredCourses.map(course=>(
+
+
+<tr key={course.id}>
+
+
+<td>
+{course.courseCode}
+</td>
+
+
+<td>
+{course.courseName}
+</td>
+
+
+<td>
+{course.credits}
+</td>
+
+
+
+<td>
+
+
+<button
+
+className="icon-btn delete-btn"
+
+onClick={()=>handleDeleteCourse(course.id)}
+
+>
+
+<Trash2 size={18}/>
+
+
+</button>
+
+
+</td>
+
+
+
+</tr>
+
+
+))
+
+
+}
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{/* ENROLL STUDENT */}
+
+
+
+<div className="glass-card form-card">
+
+
+<h3>
+Register Student To Course
+</h3>
+
+
+
+<form onSubmit={handleAddEnrollment}>
+
+
+<select
+
+name="studentId"
+
+value={newEnrollment.studentId}
+
+onChange={handleEnrollmentChange}
+
+required
+
+>
+
+
+<option value="">
+Select Student
+</option>
+
+
+
+{
+
+students.map(student=>(
+
+
+<option
+
+key={student.id}
+
+value={student.id}
+
+>
+
+
+{student.studentId} - {student.name}
+
+
+</option>
+
+
+))
+
+
+}
+
+
+
+</select>
+
+
+
+
+
+
+<select
+
+name="courseId"
+
+value={newEnrollment.courseId}
+
+onChange={handleEnrollmentChange}
+
+required
+
+>
+
+
+<option value="">
+Select Course
+</option>
+
+
+
+
+{
+
+courses.map(course=>(
+
+
+<option
+
+key={course.id}
+
+value={course.id}
+
+>
+
+
+{course.courseCode} - {course.courseName}
+
+
+</option>
+
+
+))
+
+
+}
+
+
+
+</select>
+
+
+
+
+
+
+<input
+
+name="semester"
+
+placeholder="Semester"
+
+value={newEnrollment.semester}
+
+onChange={handleEnrollmentChange}
+
+required
+
+/>
+
+
+
+
+<input
+
+name="year"
+
+placeholder="Year"
+
+value={newEnrollment.year}
+
+onChange={handleEnrollmentChange}
+
+required
+
+/>
+
+
+
+
+<button className="action-btn add-btn">
+
+<Plus size={18}/>
+
+Register Student
+
+</button>
+
+
+
+</form>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+{/* ENROLLMENT LIST */}
+
+
+
+<div className="glass-card table-card">
+
+
+<h3>
+Registered Courses
+</h3>
+
+
+
+<table className="data-table">
+
+
+<thead>
+
+
+<tr>
+
+<th>Student</th>
+
+<th>Course</th>
+
+<th>Semester</th>
+
+<th>Year</th>
+
+<th>Action</th>
+
+</tr>
+
+
+</thead>
+
+
+
+
+<tbody>
+
+
+{
+
+
+enrollments.length > 0 ?
+
+
+enrollments.map(enroll=>(
+
+
+<tr key={enroll.id}>
+
+
+<td>
+
+{enroll.student?.studentId}
+-
+{enroll.student?.name}
+
+</td>
+
+
+
+<td>
+
+{enroll.course?.courseCode}
+-
+{enroll.course?.courseName}
+
+</td>
+
+
+
+<td>
+
+{enroll.semester}
+
+</td>
+
+
+<td>
+
+{enroll.year}
+
+</td>
+
+
+
+<td>
+
+
+<button
+
+className="icon-btn delete-btn"
+
+onClick={()=>handleDeleteEnrollment(enroll.id)}
+
+>
+
+
+<Trash2 size={18}/>
+
+
+</button>
+
+
+</td>
+
+
+</tr>
+
+
+))
+
+
+:
+
+
+<tr>
+
+<td colSpan="5">
+
+No Enrollment Found
+
+</td>
+
+</tr>
+
+
+}
+
+
+
+</tbody>
+
+
+</table>
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+);
+
+
 }

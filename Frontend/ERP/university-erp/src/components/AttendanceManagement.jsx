@@ -1,123 +1,599 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, CheckCircle, XCircle } from 'lucide-react';
-import './AttendanceManagement.css';
+import React, {useEffect, useState} from "react";
 
-export default function AttendanceManagement() {
-  // 1. Pull existing students from local storage
-  const [students, setStudents] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-  
-  // 2. State to hold attendance records (Format: { studentId: 'Present' | 'Absent' })
-  const [attendanceRecord, setAttendanceRecord] = useState({});
+import {
+    Calendar as CalendarIcon,
+    CheckCircle,
+    XCircle
+} from "lucide-react";
 
-  useEffect(() => {
-    const savedStudents = localStorage.getItem('erp_students');
-    if (savedStudents) {
-      setStudents(JSON.parse(savedStudents));
-    }
-  }, []);
 
-  // Toggle a student's status between Present and Absent
-  const toggleStatus = (studentId) => {
-    setAttendanceRecord(prev => ({
-      ...prev,
-      [studentId]: prev[studentId] === 'Present' ? 'Absent' : 'Present'
-    }));
-  };
+import {
+    getStudents
+} from "../services/studentService";
 
-  const handleSaveAttendance = () => {
-    // In a real app, this would be an Axios POST request to your Spring Boot backend
-    alert(`Attendance for ${selectedDate} saved successfully!`);
-  };
 
-  return (
-    <div className="module-container">
-      
-      {/* Top Controls */}
-      <div className="controls-section attendance-controls">
-        <div className="date-picker-wrapper">
-          <CalendarIcon className="input-icon" size={18} />
-          <input 
-            type="date" 
-            className="date-picker"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-          />
-        </div>
-        
-        <div className="module-stats">
-          <span className="stat-badge">Total Enrolled: {students.length}</span>
-        </div>
-      </div>
+import {
+    getAttendance,
+    saveAttendance
+} from "../services/attendanceService";
 
-      {/* Attendance Grid */}
-      <div className="glass-card table-card">
-        <div className="table-responsive">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Student ID</th>
-                <th>Name</th>
-                <th>Batch</th>
-                <th style={{ textAlign: 'center' }}>status</th>
-                <th style={{ textAlign: 'center' }}>mark Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {students.length > 0 ? (
-                students.map((student) => {
-                  const status = attendanceRecord[student.studentId] || 'Pending';
-                  
-                  return (
-                    <tr key={student.id}>
-                      <td><strong>{student.studentId}</strong></td>
-                      <td>{student.name}</td>
-                      <td>{student.batch}</td>
-                      <td style={{ textAlign: 'center' }}>
-                        <span className={`status-badge ${status.toLowerCase()}`}>
-                          {status}
-                        </span>
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        <div className="action-toggles">
-                          <button 
-                            className={`toggle-btn present ${status === 'Present' ? 'active' : ''}`}
-                            onClick={() => toggleStatus(student.studentId)}
-                          >
-                            <CheckCircle size={16} /> Present
-                          </button>
-                          <button 
-                            className={`toggle-btn absent ${status === 'Absent' ? 'active' : ''}`}
-                            onClick={() => toggleStatus(student.studentId)}
-                          >
-                            <XCircle size={16} /> Absent
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                })
-              ) : (
-                <tr>
-                  <td colSpan="5" className="empty-state">
-                    No students found. Please register students in the Student Management module first.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
 
-      {/* Save Button */}
-      {students.length > 0 && (
-        <div className="action-footer">
-          <button className="action-btn add-btn" onClick={handleSaveAttendance}>
-            Save Daily Record
-          </button>
-        </div>
-      )}
+import "./AttendanceManagement.css";
 
-    </div>
-  );
+
+
+export default function AttendanceManagement(){
+
+
+
+const [students,setStudents]=useState([]);
+
+
+const [attendance,setAttendance]=useState([]);
+
+
+
+const [selectedDate,setSelectedDate]=useState(
+new Date().toISOString().split("T")[0]
+);
+
+
+
+const [attendanceRecord,setAttendanceRecord]=useState({});
+
+
+
+
+
+
+useEffect(()=>{
+
+
+loadData();
+
+
+},[]);
+
+
+
+
+
+
+
+const loadData=async()=>{
+
+
+try{
+
+
+const studentData = await getStudents();
+
+
+const attendanceData = await getAttendance();
+
+
+
+setStudents(studentData);
+
+
+setAttendance(attendanceData);
+
+
+
+// load today's attendance
+
+
+const todayRecords={};
+
+
+
+attendanceData.forEach(item=>{
+
+
+if(item.date===selectedDate){
+
+
+todayRecords[item.student.id]={
+
+status:item.status,
+
+attendanceId:item.id
+
+};
+
+
+}
+
+
+
+});
+
+
+
+setAttendanceRecord(todayRecords);
+
+
+
+}catch(error){
+
+console.log(error);
+
+}
+
+
+};
+
+
+
+
+
+
+
+
+
+const toggleStatus=(studentId)=>{
+
+
+setAttendanceRecord(prev=>({
+
+
+...prev,
+
+
+[studentId]:{
+
+
+status:
+
+prev[studentId]?.status==="PRESENT"
+
+?
+
+"ABSENT"
+
+:
+
+"PRESENT"
+
+
+}
+
+
+
+}));
+
+
+
+};
+
+
+
+
+
+
+
+
+
+const handleSaveAttendance=async()=>{
+
+
+try{
+
+
+for(let student of students){
+
+
+
+const record = attendanceRecord[student.id];
+
+
+
+if(record){
+
+
+
+const data={
+
+
+date:selectedDate,
+
+
+status:record.status,
+
+
+tokenUsed:"WEB",
+
+
+student:{
+
+
+id:student.id
+
+
+}
+
+
+
+};
+
+
+
+await saveAttendance(data);
+
+
+
+}
+
+
+
+}
+
+
+
+alert(
+"Attendance Saved Successfully"
+);
+
+
+
+loadData();
+
+
+
+}catch(error){
+
+
+console.log("Save Error",error);
+
+
+}
+
+
+
+};
+
+
+
+
+
+
+
+
+
+return(
+
+
+<div className="module-container">
+
+
+
+
+
+
+
+<div className="controls-section attendance-controls">
+
+
+<div className="date-picker-wrapper">
+
+
+<CalendarIcon size={18}/>
+
+
+<input
+
+
+type="date"
+
+
+className="date-picker"
+
+
+value={selectedDate}
+
+
+onChange={(e)=>
+setSelectedDate(e.target.value)
+}
+
+
+/>
+
+
+</div>
+
+
+
+
+
+
+<div className="module-stats">
+
+
+<span className="stat-badge">
+
+Total Students: {students.length}
+
+</span>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div className="glass-card table-card">
+
+
+
+<table className="data-table">
+
+
+
+<thead>
+
+<tr>
+
+<th>Student ID</th>
+
+<th>Name</th>
+
+<th>Batch</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+
+</tr>
+
+</thead>
+
+
+
+
+
+<tbody>
+
+
+
+{
+
+students.map(student=>{
+
+
+
+const status =
+
+attendanceRecord[student.id]?.status
+
+||
+
+"Pending";
+
+
+
+
+return(
+
+
+<tr key={student.id}>
+
+
+
+<td>
+
+<strong>
+
+{student.studentId}
+
+</strong>
+
+</td>
+
+
+
+
+<td>
+
+{student.name}
+
+</td>
+
+
+
+
+<td>
+
+{student.batch}
+
+</td>
+
+
+
+
+
+<td>
+
+
+<span className={`status-badge ${status.toLowerCase()}`}>
+
+{status}
+
+</span>
+
+
+</td>
+
+
+
+
+
+
+
+<td>
+
+
+
+<button
+
+
+className={
+
+status==="PRESENT"
+
+?
+
+"toggle-btn present active"
+
+:
+
+"toggle-btn present"
+
+}
+
+
+
+onClick={()=>toggleStatus(student.id)}
+
+
+>
+
+
+<CheckCircle size={16}/>
+
+Present
+
+
+</button>
+
+
+
+
+
+
+<button
+
+
+className={
+
+status==="ABSENT"
+
+?
+
+"toggle-btn absent active"
+
+:
+
+"toggle-btn absent"
+
+}
+
+
+
+onClick={()=>toggleStatus(student.id)}
+
+
+
+>
+
+
+<XCircle size={16}/>
+
+Absent
+
+
+</button>
+
+
+
+</td>
+
+
+
+
+
+</tr>
+
+
+
+)
+
+
+
+})
+
+}
+
+
+
+</tbody>
+
+
+
+</table>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{
+
+students.length>0 &&
+
+
+<div className="action-footer">
+
+
+<button
+
+
+className="action-btn add-btn"
+
+
+onClick={handleSaveAttendance}
+
+
+>
+
+
+Save Daily Record
+
+
+</button>
+
+
+
+</div>
+
+
+}
+
+
+
+
+</div>
+
+
+);
+
+
+
 }
