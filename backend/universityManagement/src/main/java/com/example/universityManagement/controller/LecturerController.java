@@ -18,15 +18,12 @@ import java.util.List;
 public class LecturerController {
 
 
-
     @Autowired
     private LecturerService lecturerService;
 
 
 
-
     // Get all lecturers
-
     @GetMapping
     public List<Lecturer> getAllLecturers(){
 
@@ -36,10 +33,7 @@ public class LecturerController {
 
 
 
-
-
     // Create lecturer
-
     @PostMapping
     public Lecturer createLecturer(
             @RequestBody Lecturer lecturer
@@ -51,21 +45,13 @@ public class LecturerController {
 
 
 
-
-
-
-
     // Get lecturer by id
-
     @GetMapping("/{id}")
     public ResponseEntity<Lecturer> getLecturerById(
             @PathVariable Long id
     ){
 
-
-        Lecturer lecturer =
-                lecturerService.getLecturerById(id);
-
+        Lecturer lecturer = lecturerService.getLecturerById(id);
 
 
         if(lecturer != null){
@@ -81,16 +67,11 @@ public class LecturerController {
 
 
 
-
-
-
     // Delete lecturer
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLecturer(
             @PathVariable Long id
     ){
-
 
         lecturerService.deleteLecturer(id);
 
@@ -99,9 +80,7 @@ public class LecturerController {
                 "Lecturer deleted"
         );
 
-
     }
-
 
 
 }
