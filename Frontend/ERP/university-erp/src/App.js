@@ -4,35 +4,57 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import StudentPortal from "./components/StudentPortal";
+import EmployeePortal from "./components/EmployeePortal";
 
 import "./App.css";
 
 
 function App(){
 
+
 return(
 
 <div className="App">
 
+
 <Routes>
 
 
-<Route 
-path="/" 
+
+<Route
+path="/"
 element={<Login/>}
 />
 
 
-<Route 
-path="/dashboard" 
+
+
+
+<Route
+path="/dashboard"
 element={<Dashboard/>}
 />
 
 
-<Route 
-path="/student-portal" 
+
+
+
+<Route
+path="/student-portal"
 element={<StudentPortal/>}
 />
+
+
+
+
+
+<Route
+path="/employee-portal"
+element={<EmployeePortal/>}
+/>
+
+
+
 
 
 </Routes>
@@ -40,7 +62,9 @@ element={<StudentPortal/>}
 
 </div>
 
+
 );
+
 
 }
 
