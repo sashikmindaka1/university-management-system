@@ -1,3 +1,4 @@
+/* --- BACKGROUND WITH BLUR EFFECT --- */
 .login-container {
   display: flex;
   justify-content: center;
@@ -5,30 +6,58 @@
   height: 100vh;
   width: 100vw;
   padding: 20px;
+  position: relative; /* Traps the background layer inside */
+  overflow: hidden; /* Hides the messy edges of the blur */
+  z-index: 1;
 }
 
+/* Invisible layer just for the background image so it doesn't blur the form */
+.login-container::before {
+  content: "";
+  position: absolute;
+  /* Stretched slightly larger to hide the white borders caused by blurring */
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  
+  /* Background photo */
+  background-image: url('../bg.jpg'); /* Adjust path if needed */
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(15, 23, 42, 0.4); 
+  background-blend-mode: overlay;
+  
+  /* THE BLUR */
+  filter: blur(10px); 
+  
+  /* Pushes this layer behind your login card */
+  z-index: -1; 
+}
+
+/* --- THE CLEAN WHITE LOGIN CARD --- */
 .login-glass-panel {
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 16px;
   padding: 40px;
   width: 100%;
   max-width: 420px;
   text-align: center;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
 }
 
 .login-header h2 {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 5px;
-  color: #ffffff;
+  color: #1e293b; /* Dark navy text for readability */
 }
 
 .login-header p {
-  color: #e2e8f0;
+  color: #64748b; /* Medium gray */
   margin-bottom: 30px;
 }
 
@@ -39,9 +68,9 @@
   width: 100%;
 }
 
-/* --- THE FIX: INPUT GROUPS --- */
+/* --- INPUT GROUPS --- */
 .input-group {
-  position: relative; /* CRITICAL: This traps the icon inside the input area */
+  position: relative; 
   width: 100%;
   display: block; 
 }
@@ -50,9 +79,9 @@
   position: absolute;
   left: 15px;
   top: 50%;
-  transform: translateY(-50%); /* Perfect vertical center */
-  color: #94a3b8;
-  pointer-events: none; /* Lets clicks pass through to the input */
+  transform: translateY(-50%);
+  color: #64748b; 
+  pointer-events: none; 
   z-index: 2;
   display: flex;
   align-items: center;
@@ -62,21 +91,22 @@
 .input-group input, 
 .role-selector {
   width: 100%;
-  box-sizing: border-box; /* CRITICAL: Keeps padding from breaking the width */
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-sizing: border-box; 
+  background: #ffffff; 
+  border: 1px solid #cbd5e1; 
   border-radius: 8px;
-  padding: 14px 15px 14px 45px !important; /* The 45px pushes text to the right of the icon */
-  color: #ffffff;
+  padding: 14px 15px 14px 45px !important; 
+  color: #1e293b; 
   font-size: 1rem;
   outline: none;
   font-family: 'Inter', sans-serif;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .input-group input:focus, 
 .role-selector:focus {
   border-color: #4F46E5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 /* Dropdown specific styles */
@@ -86,13 +116,13 @@
 }
 
 .role-selector option {
-  background-color: #0f172a;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #1e293b;
 }
 
-/* Button */
+/* --- BUTTON --- */
 .login-btn {
-  background: linear-gradient(135deg, #4F46E5, #EC4899);
+  background: #4F46E5; 
   color: white;
   border: none;
   padding: 15px;
@@ -101,26 +131,28 @@
   font-weight: 600;
   cursor: pointer;
   margin-top: 10px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
   width: 100%;
 }
 
 .login-btn:hover {
+  background: #4338ca; 
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px -10px rgba(236, 72, 153, 0.5);
+  box-shadow: 0 10px 20px -10px rgba(79, 70, 229, 0.5);
 }
 
+/* --- FOOTER LINKS --- */
 .login-footer {
   margin-top: 25px;
 }
 
 .login-footer a {
-  color: #cbd5e1;
+  color: #64748b;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s;
 }
 
 .login-footer a:hover {
-  color: #ffffff;
+  color: #4F46E5;
 }

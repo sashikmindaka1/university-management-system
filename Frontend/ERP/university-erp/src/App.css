@@ -1,12 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --glass-panel: rgba(255, 255, 255, 0.15);
-  --glass-border: rgba(255, 255, 255, 0.3);
+  /* Clean White Theme Variables */
+  --glass-panel: #ffffff; /* Solid white for cards */
+  --glass-border: #e2e8f0; /* Crisp light gray border */
   --primary-accent: #4F46E5; /* Vibrant Indigo */
   --secondary-accent: #EC4899; /* Electric Pink */
-  --text-light: #ffffff;
-  --text-muted: #e2e8f0;
+  
+  /* Text colors darkened for maximum readability on white background */
+  --text-light: #020617; /* Almost solid black for main text */
+  --text-muted: #334155; /* Dark readable slate for secondary text */
 }
 
 * {
@@ -19,14 +22,67 @@ body {
   font-family: 'Inter', sans-serif;
   color: var(--text-light);
   
-  /* Pointing to your local image in the public folder */
-  /* Notice the dot before the slash! */
-  background-image: url('./bg.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  
-  /* Blends a subtle dark tint over the photo */
-  background-color: rgba(15, 23, 42, 0.4); 
-  background-blend-mode: overlay;
+  /* Clean, professional light background */
+  background-color: #f8fafc; 
+  background-image: none !important; /* Forces the photo to disappear globally */
+}
+
+/* =========================================
+   GLOBAL COMPONENT STYLES FOR WHITE THEME
+   ========================================= */
+
+/* Premium Header Fonts */
+.sidebar-logo h2, 
+.content-header h1,
+.glass-card h2 {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  color: #000000;
+}
+
+/* Update all cards to be solid and clean instead of translucent glass */
+.glass-card {
+  background: var(--glass-panel);
+  backdrop-filter: none; /* Removes the dark glass blur */
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); /* Subtle professional shadow */
+}
+
+/* Make sure text inside cards uses the dark text variables */
+.glass-card h1, .glass-card h3 {
+  color: var(--text-light);
+}
+
+.glass-card p, .glass-card span {
+  color: var(--text-muted);
+}
+
+/* Boost the weight of small labels so they stand out */
+.glass-card h4, 
+.glass-card .label {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text-light);
+}
+
+/* Make audit log and list items darker and bolder */
+.audit-log-item, 
+.list-item,
+.stat-badge {
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+/* Ensure global inputs look good on white */
+input, select, textarea {
+  background-color: #ffffff;
+  color: var(--text-light);
+  border: 1px solid var(--glass-border);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); /* Indigo glow */
 }
