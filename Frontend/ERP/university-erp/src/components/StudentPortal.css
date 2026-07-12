@@ -2,8 +2,11 @@
 .profile-summary-card {
   padding: 25px;
   margin-bottom: 25px;
-  background: linear-gradient(135deg, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.9));
-  border-left: 4px solid var(--primary-accent);
+  background: #ffffff; /* FIX: Changed from dark gradient to clean white */
+  border: 1px solid var(--glass-border);
+  border-left: 4px solid var(--primary-accent); /* Keeps your color accent */
+  border-radius: 10px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .profile-details {
@@ -30,7 +33,7 @@
 .profile-value {
   font-size: 1.1rem;
   color: var(--text-light);
-  font-weight: 500;
+  font-weight: 600; /* Boosted for better visibility */
 }
 
 /* 3-Column Academic Grid */
@@ -44,6 +47,10 @@
   padding: 0;
   display: flex;
   flex-direction: column;
+  background: #ffffff;
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .academic-card .card-header {
@@ -64,13 +71,14 @@
   width: 170px;
   height: 170px;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(15, 23, 42, 0.9) 79%, transparent 80% 100%),
-              conic-gradient(#10b981 88%, rgba(255, 255, 255, 0.1) 0);
+  /* FIX: Inner circle changed to #ffffff (white), background track changed to #e2e8f0 (light gray) */
+  background: radial-gradient(closest-side, #ffffff 79%, transparent 80% 100%),
+              conic-gradient(#10b981 88%, #e2e8f0 0);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); /* Lighter shadow for the white theme */
 }
 
 .attendance-percentage {
@@ -91,6 +99,7 @@
   color: var(--text-muted);
   letter-spacing: 0.5px;
   margin-top: -5px;
+  font-weight: 600;
 }
 
 .attendance-stats {
@@ -111,6 +120,7 @@
 
 .stat-row strong {
   color: var(--text-light);
+  font-weight: 600;
 }
 
 .text-green { color: #10b981 !important; }
