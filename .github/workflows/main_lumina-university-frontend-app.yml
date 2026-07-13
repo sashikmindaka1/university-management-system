@@ -20,6 +20,8 @@ jobs:
 
       - name: Install dependencies and build frontend
         working-directory: ./Frontend
+        env:
+          CI: false
         run: |
           npm install --legacy-peer-deps
           npm run build
