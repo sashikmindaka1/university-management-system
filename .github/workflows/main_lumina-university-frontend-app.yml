@@ -25,6 +25,10 @@ jobs:
         run: |
           npm install --legacy-peer-deps
           npm run build
+          
+          # Azure static server එකක් විදිහට run වෙන්න අවශ්‍ය minimal package.json එකක් build folder එක ඇතුළෙම හදනවා
+          cd build
+          echo '{"name": "react-app", "scripts": {"start": "pm2 serve . --no-daemon --spa"}}' > package.json
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
