@@ -15,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/exams")
-@CrossOrigin(origins = "http://localhost:3001")
 public class ExaminationController {
 
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const API="http://localhost:8080/api";
+const API = process.env.REACT_APP_API_URL || "http://localhost:8080/api";
 
 
 export const getStudent=(id)=>
