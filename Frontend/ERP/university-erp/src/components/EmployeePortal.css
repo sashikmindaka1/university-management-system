@@ -12,10 +12,7 @@
 }
 
 
-.action-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(255, 255, 255, 0.2);
-}
+
 
 .action-icon-wrapper {
   width: 60px;
@@ -24,6 +21,11 @@
   align-items: center;
   justify-content: center;
   border-radius: 14px;
+}
+
+.action-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .action-card {
