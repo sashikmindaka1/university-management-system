@@ -43,12 +43,7 @@
   margin-bottom: 5px;
 }
 
-.action-info p {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin: 0;
-  line-height: 1.4;
-}
+
 
 /* Notice Board */
 .notice-card {
@@ -61,7 +56,12 @@
   gap: 15px;
   margin-top: 20px;
 }
-
+.action-info p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
 .notice-item {
   display: flex;
   gap: 20px;
